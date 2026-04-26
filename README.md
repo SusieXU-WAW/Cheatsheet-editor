@@ -1,23 +1,34 @@
 # Cheatsheet Editor
 
-A modern, feature-rich cheatsheet editor for developers. Create, edit, and export beautiful coding reference sheets with markdown support, multi-column layouts, and professional PDF output.
+A browser-based Markdown editor for creating print-ready coding reference sheets. Write in the left pane, see a live multi-column preview on the right, and export directly to PDF — no account or internet connection required.
+
+**Live demo**: [https://SusieXU-WAW.github.io/cheatsheet-editor/](https://SusieXU-WAW.github.io/cheatsheet-editor/)
 
 ## Features
 
-- **Single Editor View**: Edit one column at a time with column selector buttons
-- **Draggable Separator**: Resize editor and preview panes by dragging the separator
-- **Column Selector**: Quickly switch between editing different columns
-- **Adjustable Font Size**: Increase or decrease font size for both editor and preview
-- **Code Block Wrapping**: Code blocks wrap text instead of horizontal scrolling
-- **Smooth Scrolling**: Smooth scroll behavior in both editor and preview panes
-- **Live Preview**: Real-time rendering of all columns side-by-side
-- **Multi-Column Layouts**: Switch between 1, 2, or 3 column layouts with independent content
-- **PDF Export**: Generate high-quality PDF files
-- **Auto-Save**: Automatically saves all columns to browser localStorage
-- **Workspace Backup/Restore**: Save entire workspace (all columns + settings) to a JSON file on your computer
-- **Persistent Storage**: Your work is preserved across browser sessions (refresh, close, reopen)
-- **Syntax Highlighting**: Support for 15+ programming languages
-- **Offline-Ready**: Works completely offline once loaded (no database or user account needed)
+### Editor
+- **CodeMirror 6 Editor**: Line numbers, active line highlighting, code folding, and line wrapping
+- **Adjustable Font Size**: Increase or decrease font size (7px–24px) for both editor and preview
+- **Draggable Separator**: Resize editor and preview panes by dragging the divider
+- **Live Word Count**: Real-time word count displayed in the status bar
+
+### Preview
+- **Live Preview**: Real-time rendering of your Markdown as you type
+- **Multi-Column Layout**: Switch between 1, 2, or 3 CSS column layouts — ideal for dense cheatsheets
+- **Syntax Highlighting**: Code blocks highlighted via PrismJS across 14+ languages (JavaScript, TypeScript, Python, Java, C/C++, C#, Go, Rust, SQL, Bash, JSON, YAML, Markdown)
+- **Math Rendering**: Inline (`$...$`) and block (`$$...$$`) LaTeX expressions rendered via KaTeX
+- **Code Block Wrapping**: Code blocks wrap text instead of overflowing horizontally
+
+### Content
+- **Image Paste**: Paste screenshots or images from the clipboard directly into the editor; images are stored locally in IndexedDB — no uploads, no external URLs
+- **GFM Support**: GitHub Flavored Markdown — tables, strikethrough, task lists, and more
+
+### Storage & Export
+- **Auto-Save**: Content, layout, and font size automatically persist in browser localStorage
+- **Workspace Backup**: Export the full workspace (content + settings) to a dated JSON file
+- **Workspace Restore**: Import a previously saved workspace file to resume where you left off
+- **PDF Export**: Print the preview via the browser's native print dialog (File → Print → Save as PDF)
+- **Offline-Ready**: Works entirely offline once loaded — no database, no user account, no server
 
 ## Getting Started
 
@@ -33,7 +44,7 @@ npm install
 npm run dev
 ```
 
-The application will start at `http://localhost:5173/`
+The application starts at `http://localhost:5173/`
 
 ### Build for Production
 
@@ -41,68 +52,21 @@ The application will start at `http://localhost:5173/`
 npm run build
 ```
 
-### Preview Production Build
-
-```bash
-npm run preview
-```
-
-### Deploy to GitHub Pages
-
-See [QUICKSTART.md](./QUICKSTART.md) for a quick deployment guide, or [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
-
 ## Usage
 
-### Basic Workflow
+1. **Choose Layout**: Click **1 Col**, **2 Col**, or **3 Col** to set the preview column count
+2. **Write Markdown**: Type in the left editor pane — content auto-saves as you type
+3. **Adjust View**: Drag the vertical separator or use **A-** / **A+** to resize
+4. **Insert Images**: Paste any image from clipboard — it embeds automatically
+5. **Save Your Work**: Click **Backup** to export a JSON workspace file to your computer
+6. **Export PDF**: Click **Export PDF** to open the browser print dialog
 
-1. **Choose Layout**: Click "1 Column", "2 Columns", or "3 Columns" to select your layout
-2. **Select Column to Edit**: Click "Col 1", "Col 2", or "Col 3" buttons to choose which column to edit
-3. **Write Content**: Edit the selected column in the left pane
-   - Content auto-saves to browser storage as you type
-   - Scroll down to see more content
-4. **Adjust View**:
-   - Drag the vertical separator to resize editor and preview panes
-   - Use A- and A+ buttons to adjust font size
-5. **Preview**: The right pane shows live preview of all columns side-by-side
-   - Scroll to view long content
-6. **Save Your Work**:
-   - **Recommended**: Click "Backup" to save workspace to your computer
-   - Or use "Export PDF" for a printable version
-7. **Return Later**: Your work persists in browser storage - just reopen the page!
+### Math Syntax
 
-### Markdown Support
-
-The editor supports standard markdown syntax:
-
-- Headers (`#`, `##`, `###`)
-- Lists (ordered and unordered)
-- Code blocks with syntax highlighting
-- Tables
-- Links and images
-- Blockquotes
-- Horizontal rules
-- Inline code
-
-### Saving and Loading
-
-#### Auto-Save (Browser Storage)
-- Your work is **automatically saved** to browser localStorage as you type
-- Data persists across:
-  - Page refreshes
-  - Browser restarts
-  - Computer shutdowns
-- No internet connection required
-- No user account or database needed
-
-#### Workspace Backup/Restore (Recommended)
-- **Backup**: Click "Backup" to save your entire workspace to a JSON file on your computer
-  - Includes all 3 columns (even hidden ones)
-  - Saves all settings (font size, column layout, current column)
-  - File format: `cheatsheet-workspace-YYYY-MM-DD.json`
-- **Restore**: Click "Restore" to load a previously saved workspace
-  - Select a `.json` workspace file
-  - Instantly restores all content and settings
-- **Use Case**: Create backups before major changes, share workspaces, or work on multiple devices
+| Syntax | Renders |
+|--------|---------|
+| `$E = mc^2$` | Inline math |
+| `$$\sum_{i=1}^{n} x_i$$` | Block math |
 
 ## Project Structure
 
@@ -110,21 +74,40 @@ The editor supports standard markdown syntax:
 cheatsheet/
 ├── src/
 │   ├── components/
-│   │   ├── Editor.jsx       # Markdown editor component
-│   │   ├── Preview.jsx      # Live preview component
-│   │   └── Header.jsx       # Header with controls
+│   │   ├── Editor.jsx       # CodeMirror editor with image paste
+│   │   ├── Preview.jsx      # Markdown → HTML with KaTeX + Prism
+│   │   ├── Header.jsx       # Toolbar and controls
+│   │   └── Splitter.jsx     # Draggable pane divider
+│   ├── utils/
+│   │   └── imageStorage.js  # IndexedDB image persistence
 │   ├── styles/
-│   │   └── App.css          # Application styles
-│   ├── App.jsx              # Main application component
-│   └── main.jsx             # Application entry point
-├── public/                   # Static assets
-├── index.html               # HTML template
-├── vite.config.js           # Vite configuration
-├── package.json             # Dependencies and scripts
-└── README.md                # This file
+│   │   └── App.css
+│   ├── App.jsx
+│   └── main.jsx
+├── .github/workflows/
+│   └── deploy.yml           # Auto-deploy to GitHub Pages on push
+├── index.html
+├── vite.config.js
+└── package.json
 ```
+
+## Tech Stack
+
+| Layer | Library |
+|-------|---------|
+| Framework | React 19 + Vite |
+| Editor | CodeMirror 6 (`@uiw/react-codemirror`) |
+| Markdown | `marked` + GFM |
+| Math | KaTeX |
+| Syntax highlight | PrismJS |
+| PDF | Browser print API |
+| Image storage | IndexedDB |
+| XSS protection | DOMPurify |
+
+## Deployment
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for GitHub Pages deployment instructions.
 
 ## License
 
 ISC
-
