@@ -2,7 +2,7 @@
 
 A browser-based Markdown editor for creating print-ready coding reference sheets. Write in the left pane, see a live multi-column preview on the right, and export directly to PDF — no account or internet connection required.
 
-**Live demo**: [https://SusieXU-WAW.github.io/cheatsheet-editor/](https://SusieXU-WAW.github.io/cheatsheet-editor/)
+**Live demo**: [https://susiexu-waw.github.io/Cheatsheet-editor/](https://susiexu-waw.github.io/Cheatsheet-editor/)
 
 ## Features
 
